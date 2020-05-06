@@ -10,34 +10,19 @@ func showIndexPage(c *gin.Context) {
 	articles := getAllArticles()
 
 	// call the HTML method of the Content to render a template
-	c.HTML(
-		// set http status code
-		http.StatusOK,
-		// use the index.html template
-		"index.html",
-		// pass the data that the page uses
-		gin.H{
+	render(c, gin.H{
 			"title": "Home Page",
 			"payload": articles,
-		},
-	)
+		}, "index.html")
 }
 
 func getArticle(c *gin.Context) {
 	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
 		if article, err := getArticleByID(articleID); err == nil {
-			// call the HTML method of the Content to render a template
-			c.HTML(
-				// set http status code
-				http.StatusOK,
-				// use the index.html template
-				"article.html",
-				// pass the data that the page uses
-				gin.H{
+			render(c, gin.H{
 					"title": article.Title,
 					"payload": article,
-				},
-			)
+				}, "article.html")
 		} else {
 			c.AbortWithError(http.StatusNotFound, err)
 		}
